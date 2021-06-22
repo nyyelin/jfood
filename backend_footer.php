@@ -1,0 +1,197 @@
+  </div>
+  <!-- end of container -->
+
+  </div>
+      <!-- End of Main Content -->
+
+      <!-- Footer -->
+      <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright &copy; Your Website 2019</span>
+          </div>
+        </div>
+      </footer>
+      <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <!-- Logout Modal-->
+  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <a class="btn btn-primary" href="logout.php">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap core JavaScript-->
+
+
+
+  <script src="backend/back/vendor/jquery/jquery.min.js"></script>
+  <script src="backend/back/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Core plugin JavaScript-->
+  <script src="backend/back/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src="backend/back/js/sb-admin-2.min.js"></script>
+
+  <!-- datatable -->
+  <script src="backend/back/vendor/datatables/jquery.dataTables.min.js"></script>
+  <script src="backend/back/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+  <script src="backend/back/js/demo/datatables-demo.js"></script>
+  
+
+  <!-- Page level plugins -->
+  <script src="backend/back/vendor/chart.js/Chart.min.js"></script>
+
+  <!-- Page level custom scripts -->
+  <script src="backend/back/js/demo/chart-area-demo.js"></script>
+  <script src="backend/back/js/demo/chart-pie-demo.js"></script>
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+
+        $.get('chart_data.php',function(response){  
+        var arry = response.split(','); 
+        var array = JSON.parse(arry);
+        console.log(array);    
+         var data=[];
+         var number=[];
+         $.each(array,function(i,v){
+          data.push(v.month_name);
+          number.push(v.month_num);
+
+         });
+         
+        var ctx = document.getElementById("mychart");
+          var myLineChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: data,
+              datasets: [{
+                label: "Earnings",
+                lineTension: 0.3,
+                backgroundColor: "rgba(78, 115, 223, 0.05)",
+                borderColor: "rgba(78, 115, 223, 1)",
+                pointRadius: 3,
+                pointBackgroundColor: "rgba(78, 115, 223, 1)",
+                pointBorderColor: "rgba(78, 115, 223, 1)",
+                pointHoverRadius: 3,
+                pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+                pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+                pointHitRadius: 10,
+                pointBorderWidth: 2,
+                data: number,
+              }],
+            },
+            options: {
+              maintainAspectRatio: false,
+              layout: {
+                padding: {
+                  left: 10,
+                  right: 25,
+                  top: 25,
+                  bottom: 0
+                }
+              },
+              scales: {
+                xAxes: [{
+                  time: {
+                    unit: 'date'
+                  },
+                  gridLines: {
+                    display: false,
+                    drawBorder: false
+                  },
+                  ticks: {
+                    maxTicksLimit: 12
+                  }
+                }],
+                yAxes: [{
+                  ticks: {
+                    maxTicksLimit: 5,
+                    padding: 10,
+                    // Include a dollar sign in the ticks
+                    callback: function(value, index, values) {
+                      return '$' + number_format(value);
+                    }
+                  },
+                  gridLines: {
+                    color: "rgb(234, 236, 244)",
+                    zeroLineColor: "rgb(234, 236, 244)",
+                    drawBorder: false,
+                    borderDash: [2],
+                    zeroLineBorderDash: [2]
+                  }
+                }],
+              },
+              legend: {
+                display: false
+              },
+              tooltips: {
+                backgroundColor: "rgb(255,255,255)",
+                bodyFontColor: "#858796",
+                titleMarginBottom: 10,
+                titleFontColor: '#6e707e',
+                titleFontSize: 14,
+                borderColor: '#dddfeb',
+                borderWidth: 1,
+                xPadding: 15,
+                yPadding: 15,
+                displayColors: false,
+                intersect: false,
+                mode: 'index',
+                caretPadding: 10,
+                callbacks: {
+                  label: function(tooltipItem, chart) {
+                    var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+                    return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
+                  }
+                }
+              }
+            }
+          });
+
+          
+        })
+
+          $('.div_edit').hide();
+          $('div_add').show();
+
+        $('.btn-edit').click(function() {
+          $('.div_edit').show();
+          $('.div_add').hide(1000);
+          var id = $(this).data('id');
+          var name = $(this).data('name');
+          $('.id').val(id);
+          $('.name').val(name);
+        });
+    })
+  </script>
+
+
+</body>
+
+</html>
